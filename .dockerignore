@@ -1,0 +1,57 @@
+# ============================================
+# DOCKER IGNORE
+# ============================================
+# Arquivos e pastas ignorados no build Docker
+
+# Dependências
+node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Build artifacts
+dist
+build
+.next
+
+# Environment
+.env
+.env.local
+.env.production
+.env.development
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Testes
+coverage
+.nyc_output
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Temporários
+*.tmp
+*.temp
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentação
+README.md
+LICENSE

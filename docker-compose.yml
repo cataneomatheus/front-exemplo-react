@@ -1,0 +1,74 @@
+# ============================================
+# DOCKER COMPOSE
+# ============================================
+# Orquestra múltiplos containers (frontend + backend)
+
+version: '3.8'
+
+services:
+  # ==========================================
+  # SERVIÇO: API (JSON Server)
+  # ==========================================
+  api:
+    # Imagem do JSON Server
+    image: williamyeh/json-server:latest
+    
+    # Nome do container
+    container_name: musicas-api
+    
+    # Porta exposta: host:container
+    ports:
+      - "3001:3001"
+    
+    # Volume para persistir dados
+    # Mapeia db.json local para o container
+    volumes:
+      - ./api/db.json:/data/db.json
+    
+    # Comando customizado
+    command: --watch /data/db.json --port 3001 --host 0.0.0.0
+    
+    # Reinicia automaticamente se cair
+    restart: unless-stopped
+    
+    # Rede interna
+    networks:
+      - musicas-network
+
+  # ==========================================
+  # SERVIÇO: FRONTEND (React)
+  # ==========================================
+  frontend:
+    # Build a partir do Dockerfile local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Nome do container
+    container_name: musicas-frontend
+    
+    # Porta exposta: host:container
+    ports:
+      - "3000:80"
+    
+    # Variáveis de ambiente
+    environment:
+      - VITE_API_URL=http://localhost:3001
+    
+    # Depende do serviço da API
+    depends_on:
+      - api
+    
+    # Reinicia automaticamente se cair
+    restart: unless-stopped
+    
+    # Rede interna
+    networks:
+      - musicas-network
+
+# ==========================================
+# REDES
+# ==========================================
+networks:
+  musicas-network:
+    driver: bridge

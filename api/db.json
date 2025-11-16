@@ -1,0 +1,58 @@
+{
+  "musicas": [
+    {
+      "id": 1,
+      "titulo": "Bohemian Rhapsody",
+      "artista": "Queen",
+      "album": "A Night at the Opera",
+      "ano": 1975,
+      "genero": "Rock",
+      "capaUrl": "https://upload.wikimedia.org/wikipedia/pt/4/4d/Queen_A_Night_At_The_Opera.jpg"
+    },
+    {
+      "id": 2,
+      "titulo": "Stairway to Heaven",
+      "artista": "Led Zeppelin",
+      "album": "Led Zeppelin IV",
+      "ano": 1971,
+      "genero": "Rock",
+      "capaUrl": "https://upload.wikimedia.org/wikipedia/pt/2/26/Led_Zeppelin_-_Led_Zeppelin_IV.jpg"
+    },
+    {
+      "id": 3,
+      "titulo": "Billie Jean",
+      "artista": "Michael Jackson",
+      "album": "Thriller",
+      "ano": 1982,
+      "genero": "Pop",
+      "capaUrl": "https://upload.wikimedia.org/wikipedia/pt/5/55/Michael_Jackson_-_Thriller.png"
+    },
+    {
+      "id": 4,
+      "titulo": "Imagine",
+      "artista": "John Lennon",
+      "album": "Imagine",
+      "ano": 1971,
+      "genero": "Rock",
+      "capaUrl": "https://upload.wikimedia.org/wikipedia/pt/b/b9/Imaginecoverart.jpg"
+    },
+    {
+      "id": 5,
+      "titulo": "Smells Like Teen Spirit",
+      "artista": "Nirvana",
+      "album": "Nevermind",
+      "ano": 1991,
+      "genero": "Grunge",
+      "capaUrl": "https://upload.wikimedia.org/wikipedia/pt/2/27/Nevermind.jpg"
+    },
+    {
+      "titulo": "Brega 2",
+      "artista": "Joel O Divo",
+      "album": "Balela",
+      "ano": 2025,
+      "genero": "Pop",
+      "capaUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC5T9pBs068suWzmTRKScVRA7rMGQSwfqDlqd7Zr46xQ&s",
+      "id": 7
+    }
+  ]
+}
