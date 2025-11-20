@@ -12,13 +12,14 @@
  */
 
 import { useState } from 'react';
-import { Search, Plus, Music2, AlertCircle, Loader2 } from 'lucide-react';
+import { Search, Plus, Music2, AlertCircle, Loader2, Disc3 } from 'lucide-react';
 import { useMusicas } from './hooks/useMusicas';
 import { MusicaCard } from './components/MusicaCard';
 import { MusicaForm } from './components/MusicaForm';
 import { Button } from './components/ui/Button';
 import { Input } from './components/ui/Input';
 import { Musica, FormularioMusica } from './types/musica';
+import { AlbunsPage } from './components/AlbunsPage';
 
 /**
  * Componente principal da aplicação
@@ -30,7 +31,8 @@ function App() {
    * Hook customizado que gerencia as músicas
    * Retorna músicas, estado de carregamento, erros e funções CRUD
    */
-  const { musicas, carregando, erro, adicionar, atualizar, deletar } = useMusicas();
+  const { musicas, carregando, erro, adicionar, atualizar, deletar, recarregar } = useMusicas();
+  const [tela, setTela] = useState<'musicas' | 'albuns'>('musicas');
   
   // ==================== ESTADOS LOCAIS ====================
   
@@ -97,145 +99,121 @@ function App() {
     }
   };
   
+  /**
+   * Fecha o modal e limpa estado de edição
+   */
+  const handleFecharModal = () => {
+    setModalAberto(false);
+    setMusicaEditando(null);
+  };
+
   // ==================== RENDERIZAÇÃO ====================
   
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
-      {/* Container principal com padding e largura máxima */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* ========== CABEÇALHO ========== */}
-        <header className="mb-8 animate-fade-in">
-          {/* Título com gradiente */}
-          <div className="flex items-center justify-center mb-2">
-            <Music2 className="mr-3 text-primary-500" size={40} />
-            <h1 className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600">
-              Minha Coleção Musical
-            </h1>
+  const renderMusicas = () => (
+    <div className="max-w-6xl mx-auto px-4 pb-12 space-y-8">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <Music2 size={32} className="text-primary-500" />
+          <div>
+            <h1 className="text-3xl font-bold text-dark-50">Coleção de Músicas</h1>
+            <p className="text-dark-400">Gerencie faixas favoritas, crie playlists e mantenha tudo organizado.</p>
           </div>
-          
-          <p className="text-center text-dark-300 text-lg">
-            Gerencie suas músicas favoritas com estilo 🎵
-          </p>
-        </header>
-        
-        {/* ========== BARRA DE AÇÕES ========== */}
-        <div className="mb-8 flex flex-col sm:flex-row gap-4 animate-slide-up">
-          {/* Campo de busca */}
+        </div>
+        <Button onClick={handleAdicionar} className="flex items-center gap-2">
+          <Plus size={18} />
+          Nova música
+        </Button>
+      </header>
+
+      <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
+        <Input
+          placeholder="Buscar por título, artista, álbum ou gênero"
+          value={termoBusca}
+          onChange={(event) => setTermoBusca(event.target.value)}
+          icone={<Search size={18} />}
+        />
+        <Button
+          variant="secondary"
+          onClick={handleAdicionar}
+          className="flex items-center gap-2 justify-center"
+        >
+          <Plus size={16} />
+          Adicionar música
+        </Button>
+      </div>
+
+      {erro && (
+        <div className="bg-red-500/10 border border-red-500 text-red-400 rounded-lg p-4 flex flex-wrap items-start gap-3">
+          <AlertCircle size={20} className="flex-shrink-0 mt-1" />
           <div className="flex-1">
-            <Input
-              placeholder="Buscar por título, artista, álbum ou gênero..."
-              value={termoBusca}
-              onChange={(e) => setTermoBusca(e.target.value)}
-              icone={<Search size={18} />}
-            />
+            <p className="font-semibold">Erro ao carregar músicas</p>
+            <p className="text-sm">{erro}</p>
           </div>
-          
-          {/* Botão de adicionar */}
-          <Button
-            onClick={handleAdicionar}
-            size="lg"
-            className="sm:w-auto"
-          >
-            <Plus size={20} className="mr-2" />
-            Adicionar Música
+          <Button variant="secondary" size="sm" onClick={recarregar}>
+            Tentar novamente
           </Button>
         </div>
-        
-        {/* ========== CONTEÚDO PRINCIPAL ========== */}
-        <main>
-          {/* Estado de Carregamento */}
-          {carregando && (
-            <div className="flex flex-col items-center justify-center py-20 animate-fade-in">
-              <Loader2 className="animate-spin text-primary-500 mb-4" size={48} />
-              <p className="text-dark-300 text-lg">Carregando músicas...</p>
-            </div>
-          )}
-          
-          {/* Estado de Erro */}
-          {erro && !carregando && (
-            <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-6 flex items-start gap-4 animate-scale-in">
-              <AlertCircle className="text-red-500 flex-shrink-0" size={24} />
-              <div>
-                <h3 className="text-red-400 font-bold mb-1">Erro ao carregar músicas</h3>
-                <p className="text-red-300">{erro}</p>
-              </div>
-            </div>
-          )}
-          
-          {/* Lista de Músicas */}
-          {!carregando && !erro && (
-            <>
-              {/* Contador de músicas */}
-              <div className="mb-4 text-dark-300">
-                {termoBusca ? (
-                  <p>
-                    Encontradas <span className="text-primary-400 font-bold">{musicasFiltradas.length}</span> música(s) 
-                    {musicasFiltradas.length !== musicas.length && (
-                      <span> de <span className="text-white font-bold">{musicas.length}</span> total</span>
-                    )}
-                  </p>
-                ) : (
-                  <p>
-                    Total de <span className="text-primary-400 font-bold">{musicas.length}</span> música(s) na coleção
-                  </p>
-                )}
-              </div>
-              
-              {/* Grid de Cards */}
-              {musicasFiltradas.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {musicasFiltradas.map((musica) => (
-                    <MusicaCard
-                      key={musica.id}
-                      musica={musica}
-                      aoEditar={handleEditar}
-                      aoDeletar={deletar}
-                    />
-                  ))}
-                </div>
-              ) : (
-                /* Estado vazio - Nenhuma música encontrada */
-                <div className="text-center py-20 animate-fade-in">
-                  <Music2 className="mx-auto text-dark-600 mb-4" size={64} />
-                  <h3 className="text-xl font-bold text-dark-300 mb-2">
-                    {termoBusca ? 'Nenhuma música encontrada' : 'Sua coleção está vazia'}
-                  </h3>
-                  <p className="text-dark-400 mb-6">
-                    {termoBusca 
-                      ? 'Tente buscar por outros termos' 
-                      : 'Comece adicionando sua primeira música'}
-                  </p>
-                  {!termoBusca && (
-                    <Button onClick={handleAdicionar}>
-                      <Plus size={20} className="mr-2" />
-                      Adicionar Primeira Música
-                    </Button>
-                  )}
-                </div>
-              )}
-            </>
-          )}
-        </main>
-        
-        {/* ========== MODAL DE FORMULÁRIO ========== */}
-        <MusicaForm
-          aberto={modalAberto}
-          aoFechar={() => setModalAberto(false)}
-          aoSalvar={handleSalvar}
-          musicaEditando={musicaEditando}
-        />
+      )}
+
+      {carregando ? (
+        <div className="flex items-center justify-center gap-3 text-dark-300 py-16">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          Carregando músicas...
+        </div>
+      ) : musicasFiltradas.length === 0 ? (
+        <div className="text-center py-16 text-dark-300 space-y-4 bg-dark-900/40 rounded-xl border border-dark-800">
+          <p>Nenhuma música encontrada. Que tal adicionar a primeira?</p>
+          <Button onClick={handleAdicionar} className="flex items-center gap-2 mx-auto">
+            <Plus size={16} />
+            Criar música
+          </Button>
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {musicasFiltradas.map((musica) => (
+            <MusicaCard
+              key={musica.id ?? musica.titulo}
+              musica={musica}
+              aoEditar={handleEditar}
+              aoDeletar={(id) => deletar(id)}
+            />
+          ))}
+        </div>
+      )}
+
+      <MusicaForm
+        aberto={modalAberto}
+        aoFechar={handleFecharModal}
+        aoSalvar={handleSalvar}
+        musicaEditando={musicaEditando}
+      />
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-dark-950">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <nav className="flex gap-3">
+          <Button
+            onClick={() => setTela('musicas')}
+            variant={tela === 'musicas' ? 'primary' : 'ghost'}
+            className="flex items-center gap-2"
+          >
+            <Music2 size={18} />
+            Músicas
+          </Button>
+          <Button
+            onClick={() => setTela('albuns')}
+            variant={tela === 'albuns' ? 'primary' : 'ghost'}
+            className="flex items-center gap-2"
+          >
+            <Disc3 size={18} />
+            Álbuns
+          </Button>
+        </nav>
       </div>
-      
-      {/* ========== RODAPÉ ========== */}
-      <footer className="mt-16 pb-8 text-center text-dark-400 text-sm">
-        <p>
-          Feito com ❤️ para ensinar React, TypeScript e APIs REST
-        </p>
-        <p className="mt-2">
-          Demonstra: GET, POST, PUT, DELETE | Docker | TailwindCSS
-        </p>
-      </footer>
+
+      {tela === 'musicas' ? renderMusicas() : <AlbunsPage />}
     </div>
   );
 }

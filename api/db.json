@@ -44,15 +44,38 @@
       "ano": 1991,
       "genero": "Grunge",
       "capaUrl": "https://upload.wikimedia.org/wikipedia/pt/2/27/Nevermind.jpg"
+    }
+  ],
+  "albuns": [
+    {
+      "titulo": "Random Access Memories",
+      "artista": "Daft Punk",
+      "ano": 2013,
+      "genero": "Eletrônica",
+      "capaUrl": "https://upload.wikimedia.org/wikipedia/en/a/a7/Random_Access_Memories.jpg",
+      "faixas": 14,
+      "duracao": "74:24",
+      "id": 1
     },
     {
-      "titulo": "Brega 2",
-      "artista": "Joel O Divo",
-      "album": "Balela",
-      "ano": 2025,
+      "id": 2,
+      "titulo": "Abbey Road",
+      "artista": "The Beatles",
+      "ano": 1969,
+      "genero": "Rock",
+      "capaUrl": "https://upload.wikimedia.org/wikipedia/en/4/42/Beatles_-_Abbey_Road.jpg",
+      "faixas": 17,
+      "duracao": "47:23"
+    },
+    {
+      "titulo": "Lemonade",
+      "artista": "Beyoncé",
+      "ano": 2016,
       "genero": "Pop",
-      "capaUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC5T9pBs068suWzmTRKScVRA7rMGQSwfqDlqd7Zr46xQ&s",
-      "id": 7
+      "capaUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf0Zt5DI4QlHvUIVVB0FVgB_Az3jlCEN-e_Q&s",
+      "faixas": 13,
+      "duracao": "45:49",
+      "id": 3
     }
   ]
 }
